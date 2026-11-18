@@ -333,7 +333,7 @@ document.querySelectorAll('[data-hclose]').forEach(function(b){b.addEventListene
 handoff.addEventListener('click',function(e){if(e.target===handoff)closeHandoff();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHandoff();});
 document.getElementById('handoffGo').addEventListener('click',function(){
-  location.href='telerx-app.html?condition='+encodeURIComponent(state.condition||'weight')+'&from=rxmail';
+  location.href='https://cecelia001.github.io/telehealth/?condition='+encodeURIComponent(state.condition||'weight')+'&from=rxmail';
 });
 
 (function(){
