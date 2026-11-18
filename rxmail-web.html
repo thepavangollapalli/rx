@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RxMail — Online doctor visits & prescription delivery | Demo</title>
+<meta name="description" content="RxMail (fictional demo) connects you with licensed clinicians online and delivers prescription treatment to your door. Weight management, skin, hair, and everyday care.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12293D;--deep:#124C63;--teal:#1B7F86;--mint:#E6F2F1;--cream:#FBF6EF;
+  --coral:#E4673F;--coral-dark:#C4522E;--gold:#F2C14E;--line:#D9E2E5;--grey:#5A6B75;
+  --display:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --body:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;font-family:var(--body);color:var(--ink);background:#fff;font-size:17px;line-height:1.55}
+img,svg{max-width:100%}
+a{color:var(--teal)}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;margin:0 0 .5em;letter-spacing:-.01em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:3px}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:15px;text-decoration:none;border-radius:8px;padding:14px 24px;border:2px solid transparent;cursor:pointer;transition:background .15s,color .15s}
+.btn-primary{background:var(--coral);color:#fff}
+.btn-primary:hover{background:var(--coral-dark)}
+.btn-ghost{border-color:var(--deep);color:var(--deep);background:#fff}
+.btn-ghost:hover{background:var(--deep);color:#fff}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#146068}
+
+/* utility + demo tag */
+.util{background:var(--ink);color:#fff;font-size:13px}
+.util .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:center;padding:9px 22px}
+.util a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:1px}
+.util a:hover{border-bottom-color:#fff}
+.demo-tag{background:var(--gold);color:var(--ink);font-family:var(--display);font-weight:600;font-size:10.5px;letter-spacing:.09em;padding:3px 9px;border-radius:99px;text-transform:uppercase}
+
+/* offer strip */
+.offers{background:var(--mint);border-bottom:1px solid var(--line)}
+.offers .wrap{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:10px 22px}
+.offer{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:8px 18px;text-decoration:none;color:var(--deep);font-family:var(--display);font-weight:600;font-size:13.5px;letter-spacing:.02em;text-transform:uppercase;transition:transform .15s,box-shadow .15s}
+.offer:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(18,41,61,.12)}
+.offer .chev{color:var(--coral);font-weight:700}
+
+/* header */
+header{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 22px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo .bubble{width:38px;height:38px;flex:none}
+.logo .mark{font-family:var(--display);font-weight:700;font-size:27px;letter-spacing:-.02em;color:var(--deep)}
+.logo .mark span{color:var(--coral)}
+nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0}
+nav a{font-family:var(--display);font-weight:500;font-size:14px;color:var(--ink);text-decoration:none;padding:6px 0;border-bottom:3px solid transparent}
+nav a:hover,nav a[aria-current]{border-bottom-color:var(--coral)}
+.head-cta{display:flex;align-items:center;gap:12px}
+.signin{font-family:var(--display);font-size:13px;font-weight:600;color:var(--deep);text-decoration:none}
+.navtoggle{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer}
+.navtoggle span{display:block;width:20px;height:2px;background:var(--deep);margin:4px 0}
+
+/* hero */
+.hero{background:linear-gradient(160deg,#F3FAF9 0%,var(--cream) 100%);border-bottom:1px solid var(--line);overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:60px 22px}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+.hero h1{font-size:clamp(32px,4.4vw,52px);font-weight:700;color:var(--deep)}
+.hero h1 em{font-style:normal;color:var(--coral)}
+.hero p.lede{font-size:19px;color:var(--grey);max-width:40ch}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.trust{display:flex;flex-wrap:wrap;gap:18px;margin-top:26px;font-size:13.5px;color:var(--grey)}
+.trust b{color:var(--deep)}
+.trust .t{display:flex;align-items:center;gap:7px}
+.hero-art{position:relative}
+.hero-card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 44px rgba(18,41,61,.14);padding:22px;max-width:360px;margin-left:auto}
+.hero-card .doc{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
+.hero-card .av{width:48px;height:48px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;flex:none}
+.hero-card .dn{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px}
+.hero-card .dr{color:var(--grey);font-size:13px}
+.hero-card .bub{background:var(--mint);border-radius:12px;border-bottom-left-radius:3px;padding:11px 14px;font-size:14.5px;color:var(--ink);margin-bottom:9px}
+.hero-card .bub.me{background:var(--deep);color:#fff;border-radius:12px;border-bottom-right-radius:3px;margin-left:36px}
+.badge-float{position:absolute;left:-10px;bottom:24px;background:var(--gold);color:var(--ink);font-family:var(--display);font-weight:700;border-radius:14px;padding:12px 16px;box-shadow:0 10px 24px rgba(18,41,61,.18);font-size:14px;line-height:1.2}
+.badge-float small{display:block;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+
+/* pillars */
+.pillars{padding:64px 0 8px}
+.sec-head{text-align:center;max-width:680px;margin:0 auto}
+.sec-head h2{font-size:clamp(26px,3vw,36px);color:var(--deep)}
+.sec-head p{color:var(--grey);margin:0}
+.pillars .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:34px}
+.pillar{text-align:center}
+.pillar .ico{width:78px;height:78px;margin:0 auto 18px;background:var(--mint);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.pillar h3{font-size:19px;color:var(--deep)}
+.pillar p{font-size:15.5px;color:var(--grey);margin:0}
+
+/* catalog */
+.catalog{padding:64px 0;background:var(--cream);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:34px}
+.cat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.cat:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(18,41,61,.12)}
+.cat .ico{width:56px;height:56px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.cat h3{font-size:18px;color:var(--deep);margin-bottom:6px}
+.cat p{font-size:14px;color:var(--grey);margin:0 0 16px;flex:1}
+.cat .from{font-family:var(--display);font-weight:600;font-size:13px;color:var(--ink)}
+.cat .from b{color:var(--coral);font-size:16px}
+.cat .go{margin-top:14px;font-family:var(--display);font-weight:600;font-size:13.5px;color:var(--teal);display:flex;align-items:center;gap:6px}
+
+/* steps */
+.steps{padding:66px 0}
+.steps .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px;counter-reset:step}
+.step{position:relative;padding-top:16px;border-top:3px solid var(--mint)}
+.step:before{counter-increment:step;content:"Step " counter(step);font-family:var(--display);font-weight:600;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);display:block;margin-bottom:8px}
+.step h3{font-size:18px;color:var(--deep)}
+.step p{margin:0;color:var(--grey);font-size:15.5px}
+
+/* savings */
+.savings{background:var(--deep);color:#fff;padding:66px 0}
+.savings h2{color:#fff;text-align:center;font-size:clamp(26px,3vw,36px)}
+.savings .sub{text-align:center;color:#BFDCE2;margin:0 auto 8px;max-width:56ch}
+.save-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
+.save-card{background:#fff;color:var(--ink);border-radius:14px;padding:26px}
+.save-card .kicker{font-family:var(--display);font-weight:600;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.save-card .amt{font-family:var(--display);font-weight:700;font-size:30px;color:var(--deep)}
+.save-card .amt small{font-size:14px;color:var(--grey);font-weight:500}
+.save-card p{margin:10px 0 0;font-size:14.5px;color:var(--grey)}
+.savings .btn-wrap{text-align:center;margin-top:30px}
+.foot-star{max-width:900px;margin:26px auto 0;font-size:12px;color:#AFCCD4;line-height:1.5;text-align:center}
+
+/* testimonial */
+.quotes{padding:64px 0}
+.q-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.quote{border:1px solid var(--line);border-radius:14px;padding:26px;background:#fff}
+.quote .stars{color:var(--gold);font-size:15px;letter-spacing:2px;margin-bottom:10px}
+.quote p{font-size:15.5px;color:var(--ink);margin:0 0 14px;font-style:italic}
+.quote .who{font-family:var(--display);font-weight:600;font-size:13.5px;color:var(--grey)}
+
+/* CTA band */
+.cta-band{background:var(--mint);padding:56px 0;text-align:center}
+.cta-band h2{color:var(--deep);font-size:clamp(24px,3vw,34px)}
+.cta-band p{color:var(--grey);max-width:52ch;margin:0 auto 24px}
+
+/* ISI */
+.isi-block{background:var(--cream);border-top:1px solid var(--line);padding:56px 0}
+.isi-block h2{font-size:24px;color:var(--deep)}
+.isi-block h3{font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);margin-top:24px}
+.isi-block p,.isi-block li{font-size:15px;color:#33454F}
+.isi-block ul{padding-left:20px}
+.cols{max-width:900px;margin:0 auto}
+
+/* footer */
+footer{background:var(--ink);color:#C6D3DB;padding:44px 0 34px;font-size:13.5px}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px;max-width:none;margin:0}
+footer a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3)}
+footer h4{color:#fff;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:12px}
+footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+footer ul a{border:none}
+.corp{font-family:var(--display);font-weight:700;font-size:19px;color:#fff}
+.jobcode{font-size:11.5px;color:#8DA3B0;margin-top:14px;letter-spacing:.03em}
+.fiction{margin-top:16px;font-size:12px;color:var(--gold);max-width:64ch}
+.footrow{border-top:1px solid rgba(255,255,255,.15);margin-top:30px;padding-top:20px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+
+/* modal (telehealth interstitial) */
+.modal-bg{position:fixed;inset:0;background:rgba(18,76,99,.93);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:56px 20px 40px;overflow-y:auto}
+.modal-bg.show{display:flex}
+.modal-lg{background:#fff;border-radius:8px;max-width:760px;width:100%;position:relative;overflow:hidden;text-align:left}
+.modal-close{position:absolute;top:-22px;right:-22px;width:46px;height:46px;border-radius:50%;background:var(--coral);color:#fff;border:3px solid #fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:2}
+.modal-close:hover{background:var(--coral-dark)}
+.m-head{background:#F1F4F5;border-bottom:1px solid var(--line);padding:30px 40px 24px;text-align:center}
+.m-head .mark{font-family:var(--display);font-weight:700;font-size:34px;color:var(--deep)}
+.m-head .mark span{color:var(--coral)}
+.m-head p{margin:14px 0 0;font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink)}
+.m-body{padding:28px 40px 32px}
+.m-step{display:grid;grid-template-columns:70px 1fr;gap:18px;align-items:start;margin-bottom:22px}
+.m-step .ico{width:70px;height:64px;background:var(--mint);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.m-step h4{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin:0 0 6px}
+.m-step p{margin:0;font-size:15px;color:var(--ink);line-height:1.5}
+.m-note{font-size:14px;color:#33454F;margin:12px 0 0;line-height:1.5}
+.m-note b{color:var(--ink)}
+.m-cta{text-align:center;margin-top:26px}
+.m-foot{background:#F1F4F5;border-top:1px solid var(--line);padding:15px 40px;text-align:center;font-size:13px;font-weight:600;color:var(--ink)}
+
+@media(max-width:980px){
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .save-grid,.q-grid{grid-template-columns:1fr}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media(max-width:860px){
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);padding:12px 22px 18px}
+  nav.open{display:block}
+  nav ul{flex-direction:column;gap:2px}
+  nav a{display:block;padding:10px 0;border-bottom:1px solid var(--line)}
+  .navtoggle{display:block}
+  header .wrap{position:relative}
+  .signin{display:none}
+  .hero .wrap{grid-template-columns:1fr;gap:32px}
+  .pillars .grid,.steps .grid{grid-template-columns:1fr}
+  .m-step{grid-template-columns:1fr;gap:10px}
+  .m-step .ico{width:56px;height:52px}
+  .modal-close{right:-6px;top:-20px}
+}
+</style>
+</head>
+<body id="top">
+
+<div class="util">
+  <div class="wrap">
+    <span class="demo-tag">Demo · fictional brand</span>
+    <a href="#how">How it works</a>
+    <a href="#savings">Pricing</a>
+    <a href="#isi">Safety information</a>
+    <a href="rxmail-app.html">Patient portal ▸</a>
+  </div>
+</div>
+
+<div class="offers">
+  <div class="wrap">
+    <a class="offer" href="#catalog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4673F" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.6-.8-1.6-1.2-2.6-1.2-1.4 0-2.4.7-2.4 1.8 0 2.6 5.2 1.2 5.2 3.9 0 1.2-1.1 1.9-2.6 1.9-1.2 0-2.2-.4-2.8-1.3M12 6.6v1.6M12 15.8v1.6"/></svg>Visits from $0 with insurance <span class="chev">▸</span></a>
+    <a class="offer" href="#start" id="offerTele"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4673F" stroke-width="2"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Talk to a doctor online <span class="chev">▸</span></a>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top">
+      <svg class="bubble" viewBox="0 0 46 46" aria-hidden="true"><path d="M8 4h30a6 6 0 016 6v18a6 6 0 01-6 6H22l-10 8v-8H8a6 6 0 01-6-6V10a6 6 0 016-6z" fill="#1B7F86"/><path d="M23 12v14M16 19h14" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+      <span class="mark">Rx<span>Mail</span></span>
+    </a>
+    <button class="navtoggle" aria-expanded="false" aria-controls="mainnav" aria-label="Open menu"><span></span><span></span><span></span></button>
+    <nav id="mainnav">
+      <ul>
+        <li><a href="#catalog">Treatments</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#savings">Pricing</a></li>
+        <li><a href="#quotes">Reviews</a></li>
+        <li><a href="#isi">Safety</a></li>
+      </ul>
+    </nav>
+    <div class="head-cta">
+      <a class="signin" href="rxmail-app.html">Sign in</a>
+      <a class="btn btn-primary" href="#start" id="headStart">Get started</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Online care · delivered to your door</p>
+      <h1>See a doctor online. <em>Get treatment shipped.</em></h1>
+      <p class="lede">RxMail connects you with licensed clinicians for a quick online visit — and if it's right for you, your prescription ships free, discreetly, in 2 days.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#start" id="heroStart">Start my visit</a>
+        <a class="btn btn-ghost" href="#catalog">Browse treatments</a>
+      </div>
+      <div class="trust">
+        <span class="t"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="2"><path d="M12 21s-7-4.6-7-10a7 7 0 0114 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/></svg><b>US-licensed</b> clinicians</span>
+        <span class="t"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><b>Free 2-day</b> shipping</span>
+        <span class="t"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V7z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg><b>HIPAA-secure</b> visits</span>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-card" aria-hidden="true">
+        <div class="doc">
+          <div class="av"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></div>
+          <div><div class="dn">Dr. Elena Ruiz, NP</div><div class="dr">Family medicine · online now</div></div>
+        </div>
+        <div class="bub">Thanks for the details! Based on your intake, a once-daily option looks like a good fit.</div>
+        <div class="bub me">Great — how soon can it ship?</div>
+        <div class="bub">I'm sending it to the pharmacy now. Free 2-day delivery — you'll get tracking today.</div>
+      </div>
+      <div class="badge-float">$0–$79<small>per month</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="pillars">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Care without the waiting room</h2>
+      <p>A complete visit, prescription, and delivery — most people finish the intake in under 10 minutes.</p>
+    </div>
+    <div class="grid">
+      <div class="pillar"><div class="ico"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="1.7"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div><h3>Visit on your schedule</h3><p>Answer a short set of health questions online. A licensed clinician reviews them — no appointment needed.</p></div>
+      <div class="pillar"><div class="ico"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="1.7"><path d="M4 7h16v13H4z"/><path d="M9 7V4h6v3"/><path d="M12 11v5M9.5 13.5h5"/></svg></div><h3>Treatment to your door</h3><p>If prescribed, your medication ships free in discreet packaging with tracking — usually within two days.</p></div>
+      <div class="pillar"><div class="ico"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="1.7"><path d="M12 21s-7-4.6-7-10a7 7 0 0114 0c0 5.4-7 10-7 10z"/><path d="M9.5 11l1.8 1.8 3.4-3.6"/></svg></div><h3>Ongoing support</h3><p>Message your care team any time, and set auto-refills so you never run out of a medication you rely on.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="catalog" id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>What can we help with?</h2>
+      <p>Pick a category to start a visit. Pricing shown is a demo estimate, before insurance.</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<section class="steps" id="how">
+  <div class="wrap">
+    <div class="sec-head"><h2>How RxMail works</h2><p>Four simple steps from question to doorstep.</p></div>
+    <div class="grid">
+      <div class="step"><h3>Choose a treatment</h3><p>Tell us what you'd like help with and answer a few quick health questions.</p></div>
+      <div class="step"><h3>Online visit</h3><p>A US-licensed clinician reviews your intake — often the same day — and prescribes if appropriate.</p></div>
+      <div class="step"><h3>We fill it</h3><p>Our pharmacy prepares your prescription and applies any savings you qualify for.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:34px"><a class="btn btn-teal" href="#start" id="stepsStart">Start my visit</a></div>
+  </div>
+</section>
+
+<section class="savings" id="savings">
+  <div class="wrap">
+    <h2>Simple, upfront pricing</h2>
+    <p class="sub">No surprise fees. Use insurance where eligible, or pay a flat cash price. Demo figures only.</p>
+    <div class="save-grid">
+      <div class="save-card"><div class="kicker">Online visit</div><div class="amt">$0<small> with insurance</small></div><p>Most insured visits are $0. Without insurance, a visit is a flat <strong>$25</strong>.</p></div>
+      <div class="save-card"><div class="kicker">RxMail Direct pharmacy</div><div class="amt">$79<small> / month</small></div><p>Flat cash price for many treatments, shipped free to your door with auto-refill.</p></div>
+      <div class="save-card"><div class="kicker">ScriptSaver℞ discount</div><div class="amt">Up to 80%<small> off</small></div><p>Manufacturer and pharmacy discounts applied automatically at checkout when available.</p></div>
+    </div>
+    <div class="btn-wrap"><a class="btn btn-primary" href="#start" id="saveStart">Check my price</a></div>
+    <p class="foot-star">*All names, prices, and products on this page are fictional and for demonstration only. Not medical advice. Not a real pharmacy.</p>
+  </div>
+</section>
+
+<section class="quotes" id="quotes">
+  <div class="wrap">
+    <div class="sec-head"><h2>What members say</h2><p>Illustrative reviews for this demo.</p></div>
+    <div class="q-grid">
+      <div class="quote"><div class="stars">★★★★★</div><p>"The intake took five minutes on my lunch break and my prescription showed up two days later. No waiting room, no pharmacy line."</p><div class="who">— Jordan M., demo member</div></div>
+      <div class="quote"><div class="stars">★★★★★</div><p>"I liked being able to message the clinician with a follow-up question without booking another appointment."</p><div class="who">— Priya S., demo member</div></div>
+      <div class="quote"><div class="stars">★★★★☆</div><p>"Auto-refill means I stopped running out. The packaging is plain, which I appreciate."</p><div class="who">— Chris T., demo member</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Ready when you are</h2>
+    <p>Start an online visit now. It's free to see if treatment is right for you — you only pay if you're prescribed and choose to fill.</p>
+    <a class="btn btn-primary" href="#start" id="bandStart">Start my visit</a>
+  </div>
+</section>
+
+<section class="isi-block" id="isi">
+  <div class="wrap cols">
+    <h2>Important information</h2>
+    <p>This is a fictional demonstration website for the invented brand "RxMail." It is not a real pharmacy or telehealth provider, sells nothing, and provides no medical care. The content below imitates the structure of a real prescription-service safety section for realism only.</p>
+    <h3>Who telehealth may not be right for</h3>
+    <p>Online care isn't appropriate for medical emergencies. If you think you may have a medical emergency, call your local emergency number. Some conditions and medications require in-person evaluation or lab work before they can be prescribed.</p>
+    <h3>About prescriptions</h3>
+    <p>In a real service, a prescription is issued only if a licensed clinician determines it's appropriate after reviewing your intake. Not everyone who requests a treatment will be prescribed one. Availability of specific medications varies by state, and some states restrict or prohibit certain telehealth prescribing.</p>
+    <h3>Common considerations</h3>
+    <ul>
+      <li>Tell your clinician about all medications, supplements, and allergies.</li>
+      <li>Some treatments interact with other drugs or existing conditions.</li>
+      <li>Report side effects to your clinician; seek urgent care for severe reactions.</li>
+    </ul>
+    <p class="m-note" style="margin-top:22px"><b>Demo notice:</b> Do not enter real personal, health, or payment information into this prototype.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="corp">RxMail</div>
+        <div class="jobcode">Demo build · US-XXXX-00000 · v1.0</div>
+        <p class="fiction">RxMail is a fictional brand created for design demonstration. No products are sold and no medical services are provided.</p>
+      </div>
+      <div><h4>Treatments</h4><ul><li><a href="#catalog">Weight management</a></li><li><a href="#catalog">Skin care</a></li><li><a href="#catalog">Hair loss</a></li><li><a href="#catalog">Everyday care</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#how">How it works</a></li><li><a href="#savings">Pricing</a></li><li><a href="#quotes">Reviews</a></li><li><a href="rxmail-app.html">Patient portal</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="#isi">Safety information</a></li><li><a href="#isi">Privacy (demo)</a></li><li><a href="#isi">Terms (demo)</a></li></ul></div>
+    </div>
+    <div class="footrow">
+      <span>© 2026 RxMail (fictional). For demonstration only.</span>
+      <span class="demo-tag">Demo · fictional brand</span>
+    </div>
+  </div>
+</footer>
+
+<!-- telehealth interstitial -->
+<div class="modal-bg" id="modalTele" role="dialog" aria-modal="true" aria-labelledby="teleTitle">
+  <div class="modal-lg">
+    <button class="modal-close" data-close aria-label="Close">✕</button>
+    <div class="m-head">
+      <div class="mark">Rx<span>Mail</span> Visit</div>
+      <p id="teleTitle">Start an online visit to find out if treatment is right for you.</p>
+    </div>
+    <div class="m-body">
+      <div class="m-step">
+        <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none" stroke="#124C63" stroke-width="2"><rect x="11" y="7" width="26" height="34" rx="3" fill="#fff"/><path d="M18 7h12v5H18z" fill="#E4673F" stroke="none"/><path d="M17 20h14M17 26h14M17 32h9"/></svg></div>
+        <div><h4>Step 1 · Registration</h4><p>Create an account and fill out a short medical questionnaire.</p></div>
+      </div>
+      <div class="m-step">
+        <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none" stroke="#124C63" stroke-width="2"><rect x="13" y="5" width="22" height="38" rx="4" fill="#fff"/><circle cx="24" cy="19" r="5" fill="#1B7F86" stroke="none"/><path d="M15 34c2-5 5.5-7 9-7s7 2 9 7" fill="#E4673F" stroke="none"/></svg></div>
+        <div><h4>Step 2 · Clinician review</h4><p>A licensed clinician reviews your intake, often the same day, and prescribes if appropriate.</p></div>
+      </div>
+      <div class="m-step">
+        <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none" stroke="#124C63" stroke-width="2"><path d="M8 22a8 8 0 0116 0v16H8z" fill="#fff"/><path d="M24 22a8 8 0 0116 0v16H24z" fill="#1B7F86" stroke="none"/><rect x="28" y="10" width="10" height="12" rx="2" fill="#E4673F" stroke="none"/></svg></div>
+        <div><h4>Step 3 · Delivery</h4><p>If prescribed, choose a savings option and we ship free in 2 days.
+          <span class="m-note"><b>Please note:</b> availability varies by state; this is a fictional demo and issues no real prescriptions.</span></p></div>
+      </div>
+      <div class="m-cta"><a class="btn btn-primary" href="rxmail-app.html" data-go>Continue to my visit</a></div>
+    </div>
+    <div class="m-foot">This is a demonstration. Clicking continue opens the RxMail patient-portal prototype.</div>
+  </div>
+</div>
+
+<script>
+// mobile nav
+var toggle=document.querySelector('.navtoggle'),nav=document.getElementById('mainnav');
+toggle.addEventListener('click',function(){var open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',open);});
+
+// catalog data -> cards
+var CATS=[
+  {t:'Weight management',d:'Once-daily options to support weight loss with diet and activity.',from:'$79',ico:'<path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h6v6"/>',cond:'weight'},
+  {t:'Skin care',d:'Prescription treatments for acne, anti-aging, and melasma.',from:'$30',ico:'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/>',cond:'skin'},
+  {t:'Hair loss',d:'Daily and topical options to help slow thinning and regrow hair.',from:'$22',ico:'<path d="M5 12a7 7 0 0114 0"/><path d="M5 12v4M9 12v6M12 12v7M15 12v6M19 12v4"/>',cond:'hair'},
+  {t:'Everyday care',d:'Cold sores, allergies, acid reflux, and other common needs.',from:'$15',ico:'<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7V4h6v3M12 11v5M9.5 13.5h5"/>',cond:'everyday'}
+];
+var grid=document.getElementById('catGrid');
+grid.innerHTML=CATS.map(function(c){
+  return '<a class="cat" href="rxmail-app.html?condition='+c.cond+'">'
+    +'<div class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="1.7">'+c.ico+'</svg></div>'
+    +'<h3>'+c.t+'</h3><p>'+c.d+'</p>'
+    +'<div class="from">From <b>'+c.from+'</b>/mo</div>'
+    +'<div class="go">Start a visit <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B7F86" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></a>';
+}).join('');
+
+// telehealth interstitial on "start" CTAs
+var tele=document.getElementById('modalTele');
+['heroStart','headStart','stepsStart','saveStart','bandStart','offerTele'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el)el.addEventListener('click',function(e){e.preventDefault();openModal();});
+});
+function openModal(){tele.classList.add('show');document.body.style.overflow='hidden';tele.querySelector('[data-close]').focus();}
+function closeModal(){tele.classList.remove('show');document.body.style.overflow='';}
+document.querySelectorAll('[data-close]').forEach(function(b){b.addEventListener('click',closeModal);});
+tele.addEventListener('click',function(e){if(e.target===tele)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
